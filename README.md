@@ -12,7 +12,7 @@ The benchmark consists of 1241 question-and-answer pairs covering various medica
 
 The dataset is hosted separately on Zenodo and needs to be downloaded manually.
 
-* **Dataset:** Riegler, M. A. (2025). Norwegian Medical Question Answering Dataset - NorMedQA (1.0) [Data set]. Zenodo. [https://doi.org/10.5281/zenodo.15320038](https://doi.org/10.5281/zenodo.15320038)
+* **Dataset:** Riegler, M. A. (2025). Norwegian Medical Question Answering Dataset - NorMedQA (1.0) [Data set]. Zenodo.[https://zenodo.org/records/15345466](https://zenodo.org/records/15345466)
 
 *Note: The repository includes code to split the original data file into train/test sets.*
 
