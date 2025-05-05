@@ -6,11 +6,11 @@ This repository provides the configuration for running the NorMedQA benchmark us
 
 NorMedQA is designed to evaluate the medical knowledge and reasoning capabilities of large language models (LLMs) in Norwegian context (Bokmål and Nynorsk).
 
-The benchmark consists of 1241 question-and-answer pairs covering various medical fields. The data was collected from publicly available sources containing Norwegian medical examination questions and subsequently checked, cleaned and preprocessed.
+The benchmark consists of 1401 question-and-answer pairs covering various medical fields. It also contains the wrong answers if the question had multiple choices (wrong_answers_text seperated via ;, which should allow multiple choice testing, not implemented in the provided example). The data was collected from publicly available sources containing Norwegian medical examination questions and subsequently checked, cleaned and preprocessed.
 
 ## Dataset
 
-The dataset is hosted separately on Zenodo and needs to be downloaded manually.
+The dataset is hosted separately on Zenodo and can be downloaded either from Zenodo or Github.
 
 * **Dataset:** Riegler, M. A. (2025). Norwegian Medical Question Answering Dataset - NorMedQA (1.0) [Data set]. Zenodo. [https://zenodo.org/records/15345466](https://zenodo.org/records/15345466)
 
@@ -18,7 +18,7 @@ The dataset is hosted separately on Zenodo and needs to be downloaded manually.
 
 ## Usage
 
-You can run the benchmark evaluation using the provided Colab notebook or by setting up the environment locally (see notebook and python file).
+You can run the benchmark evaluation using the provided Colab notebook or by setting up the environment locally (see notebook and python file). This benchmark example only focuses on a single correct answer. This could be extended to multiple choice testing in the LM-evaluation-harness using the wrong answers provided.
 
 * **Colab Notebook:** [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1sDYReWYdt-3vYiAibqAohrAqTBD7aJHr?usp=sharing)
 
