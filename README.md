@@ -6,13 +6,13 @@ This repository provides the configuration for running the NorMedQA benchmark us
 
 NorMedQA is designed to evaluate the medical knowledge and reasoning capabilities of large language models (LLMs) in Norwegian context (Bokmål and Nynorsk).
 
-The benchmark consists of 1401 question-and-answer pairs covering various medical fields. It also contains the wrong answers if the question had multiple choices (wrong_answers_text seperated via ;, which should allow multiple choice testing, not implemented in the provided example). The data was collected from publicly available sources containing Norwegian medical examination questions and subsequently checked, cleaned and preprocessed.
+The benchmark consists of 1313 question-and-answer pairs covering various medical fields. It also contains the wrong answers if the question had multiple choices (wrong_answers_text seperated via ;, which should allow multiple choice testing, not implemented in the provided example). The data was collected from publicly available sources containing Norwegian medical examination questions and subsequently checked, cleaned and preprocessed. The repository also contains a version that has answers included that require interpretation of an image or ECG (1401 question answer pairs, mutlimodal data will be added at a later stage).
 
 ## Dataset
 
 The dataset is hosted separately on Zenodo and can be downloaded either from Zenodo or Github.
 
-* **Dataset:** Riegler, M. A. (2025). Norwegian Medical Question Answering Dataset - NorMedQA (1.0) [Data set]. Zenodo. [https://zenodo.org/records/15346637](https://zenodo.org/records/15346637)
+* **Dataset:** Riegler, M. A. and Gautam, Sushant (2025). Norwegian Medical Question Answering Dataset - NorMedQA (1.0) [Data set]. Zenodo. [https://zenodo.org/records/15346637](https://zenodo.org/records/15346637)
 
 *Note: The repository includes code to split the original data file into train/test sets.*
 
@@ -41,7 +41,7 @@ If you use this benchmark configuration or the associated dataset, please cite:
 
 ```bibtex
 @dataset{riegler_michael_alexander_2025_15320038,
-  author       = {Riegler, Michael Alexander},
+  author       = {Riegler, Michael Alexander, Gautam, Sushant},
   title        = {{Norwegian Medical Question Answering Dataset - NorMedQA}},
   month        = may,
   year         = 2025,
