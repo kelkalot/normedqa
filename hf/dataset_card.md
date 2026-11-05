@@ -119,8 +119,10 @@ The pipeline and checks were built with Claude Code (Claude Opus 5.5). The `sami
   author       = {Riegler, Michael Alexander and Gautam, Sushant and Gran Erke, Maja},
   title        = {{NorMedQA: Norwegian Medical Question Answering Benchmark}},
   year         = 2026,
-  publisher    = {Zenodo},
-  version      = {3.0}
+  publisher    = {Hugging Face},
+  version      = {3.0},
+  doi          = {10.57967/hf/11462},
+  url          = {https://doi.org/10.57967/hf/11462}
 }
 ```
 

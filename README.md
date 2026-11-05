@@ -1,5 +1,7 @@
 # NorMedQA
 
+[![DOI](https://img.shields.io/badge/DOI-10.57967%2Fhf%2F11462-blue)](https://doi.org/10.57967/hf/11462) · Dataset: [huggingface.co/datasets/kelkalot/normedqa](https://huggingface.co/datasets/kelkalot/normedqa) · Browser: [huggingface.co/spaces/kelkalot/normedqa-browser](https://huggingface.co/spaces/kelkalot/normedqa-browser)
+
 NorMedQA tests how well language models answer medical questions in Norwegian. Version 3 has two parts:
 
 - **Exam questions**: 2,260 multiple-choice questions from the Norwegian national written final exam in medicine, 16 sittings from spring 2017 to spring 2026. Most come in both Bokmål and Nynorsk. Each has the official answer key and the official explanation for every option. 457 of the 3,940 items include an image (ECG, X-ray, CT, clinical photo and so on).
@@ -151,15 +153,17 @@ Each item names its publisher in `source.publisher`. GiellaLT marks texts as `fr
 
 ## Citation
 
-v3 (the Zenodo DOI is added when the release is published):
+v3 ([doi:10.57967/hf/11462](https://doi.org/10.57967/hf/11462)):
 
 ```bibtex
 @dataset{normedqa_v3_2026,
   author       = {Riegler, Michael Alexander and Gautam, Sushant and Gran Erke, Maja},
   title        = {{NorMedQA: Norwegian Medical Question Answering Benchmark}},
   year         = 2026,
-  publisher    = {Zenodo},
-  version      = {3.0}
+  publisher    = {Hugging Face},
+  version      = {3.0},
+  doi          = {10.57967/hf/11462},
+  url          = {https://doi.org/10.57967/hf/11462}
 }
 ```
 
