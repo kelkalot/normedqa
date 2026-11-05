@@ -51,6 +51,7 @@ def main(argv: list[str] | None = None) -> None:
     e.add_argument("--reasoning-effort", default="low")
     e.add_argument("--out", type=Path, default=ROOT / "build" / "eval")
     sub.add_parser("eval-report", help="accuracy per model, written form, sitting and image use from build/eval")
+    sub.add_parser("sami-translations", help="build the Sámi-question files from sources/sami_drafts.jsonl and sami_reviews.jsonl")
     sub.add_parser("crosswalk", help="map every v2 item to its v3 counterpart; writes legacy/v2/crosswalk_v2_v3.csv")
     args = p.parse_args(argv)
 
@@ -97,6 +98,10 @@ def main(argv: list[str] | None = None) -> None:
         cond = ("noimage" if args.no_images else "default") + ("-shuffled" if args.shuffle else "")
         run_eval(args.file, args.out, args.model, condition=f"{args.file.stem}-{cond}", with_images=not args.no_images,
                  shuffle=args.shuffle, filter_fn=keep, base_url=args.base_url, reasoning_effort=args.reasoning_effort)
+    elif args.cmd == "sami-translations":
+        from .sami_translations import build as build_translations
+
+        print(build_translations(OUT, ROOT / "sources"))
     elif args.cmd == "crosswalk":
         from .crosswalk import build as build_crosswalk
 

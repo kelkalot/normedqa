@@ -130,6 +130,16 @@ function matches(it) {
   return true;
 }
 
+function trChip(tr) {
+  if (tr === "machine_draft") return '<span class="chip amber">Sámi: machine draft, under review</span>';
+  if (tr === "reviewed") return '<span class="chip">Sámi: reviewed</span>';
+  return "";
+}
+
+function simpleOptions(labels, texts, ans) {
+  return labels.map((lab, k) => `<li class="opt${ans.includes(lab) ? " acc" : ""}"><span class="mark">${lab}${ans.includes(lab) ? " ✓" : ""}</span><span class="txt">${esc(texts[k])}</span></li>`).join("");
+}
+
 function options(it) {
   return it.o.map(([lab, txt, , pts]) => {
     const acc = it.ans.includes(lab), wasX = it.orig && it.orig.includes(lab);
@@ -140,11 +150,15 @@ function options(it) {
 function card(it) {
   if (part === "sami") {
     const easy = it.flags.includes("answerable_without_passage");
+    const labels = it.o.map(o => o[0]);
+    const sami = it.qs ? `<div class="q" lang="${it.l}">${esc(it.qs)}</div><ul class="opts">${simpleOptions(labels, it.os, it.ans)}</ul>
+      <details><summary>Question in Bokmål</summary><div class="q">${esc(it.q)}</div><ul class="opts">${options(it)}</ul></details>`
+      : `<div class="q">${esc(it.q)}</div><ul class="opts">${options(it)}</ul>`;
     return `<article class="item">
-      <div class="meta"><span class="mono">${esc(it.id)}</span><span class="chip">${LANG[it.l]}</span><span class="chip">${esc(it.topic)}</span>${easy ? '<span class="chip amber">Answerable without passage</span>' : ""}</div>
-      <div class="passage" lang="${it.l === "se" ? "se" : it.l}">${esc(it.p)}</div>
+      <div class="meta"><span class="mono">${esc(it.id)}</span><span class="chip">${LANG[it.l]}</span><span class="chip">${esc(it.topic)}</span>${trChip(it.tr)}${easy ? '<span class="chip amber">Bokmål question answerable without passage</span>' : ""}</div>
+      <div class="passage" lang="${it.l}">${esc(it.p)}</div>
       ${it.po ? `<details><summary>Original text (${esc(it.pol)})</summary><div class="expl">${esc(it.po)}</div></details>` : ""}
-      <div class="q">${esc(it.q)}</div><ul class="opts">${options(it)}</ul>
+      ${sami}
       <div class="src">Source: <a href="${esc(it.src)}" target="_blank" rel="noopener">${esc(it.title)}</a> · ${esc(it.pub)}</div>
     </article>`;
   }
@@ -154,7 +168,7 @@ function card(it) {
   const imgs = it.img.length ? `<div class="imgs">${it.img.map(f => `<a href="img/${f}" target="_blank" rel="noopener"><img src="img/${f}" loading="lazy" alt="Image for ${esc(it.id)}"></a>`).join("")}</div>` : "";
   const pages = it.pages.length > 1 ? `pages ${it.pages[0]}–${it.pages[it.pages.length - 1]}` : `page ${it.pages[0]}`;
   return `<article class="item ${it.st}">
-    <div class="meta"><span class="mono">${esc(it.id)}</span><span class="chip">${it.s}</span><span class="chip">${LANG[it.l]}</span><span class="chip">${esc(it.split)}</span>${st}${extra}</div>
+    <div class="meta"><span class="mono">${esc(it.id)}</span><span class="chip">${it.s}</span><span class="chip">${LANG[it.l]}</span><span class="chip">${esc(it.split)}</span>${st}${extra}${trChip(it.tr)}</div>
     <div class="q">${esc(it.q)}</div>${imgs}<ul class="opts">${options(it)}</ul>
     ${it.note ? `<div class="gnote">${esc(it.note)}</div>` : ""}
     ${expl ? `<details><summary>Official explanations</summary><div class="expl">${expl}</div></details>` : ""}
@@ -176,8 +190,9 @@ function switchTo(p) { part = p; setupFilters(); apply(); }
 
 fetch("data.json").then(r => r.json()).then(D => {
   DATA = D;
-  const ex = D.exam, ok = ex.filter(i => i.st === "ok");
-  const stats = [["Exam questions", new Set(ex.map(i => i.g)).size], ["Exam items (nb + nn)", ex.length], ["Scored", ok.length], ["With an image", ex.filter(i => i.img.length).length], ["Sámi reading items", D.sami.length], ["Sámi, needs the passage", D.sami.filter(i => !i.flags.includes("answerable_without_passage")).length]];
+  const ex = D.exam.filter(i => i.l === "nb" || i.l === "nn"), ok = ex.filter(i => i.st === "ok");
+  const drafts = [...D.sami, ...D.exam].filter(i => i.tr === "machine_draft" || i.tr === "reviewed");
+  const stats = [["Exam questions", new Set(ex.map(i => i.g)).size], ["Exam items (nb + nn)", ex.length], ["Scored", ok.length], ["With an image", ex.filter(i => i.img.length).length], ["Sámi reading items", D.sami.length], ["Sámi versions reviewed", `${drafts.filter(i => i.tr === "reviewed").length} / ${drafts.length}`]];
   $("#stats").innerHTML = stats.map(([k, v]) => `<div class="stat"><span class="label">${k}</span><b>${fmt(v)}</b></div>`).join("");
   ["#f-a", "#f-l", "#f-k"].forEach(s => $(s).addEventListener("change", apply));
   $("#f-q").addEventListener("input", apply);

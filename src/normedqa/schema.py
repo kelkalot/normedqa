@@ -84,6 +84,7 @@ class Item(BaseModel):
     topic: str | None = None
     translation: TranslationStatus = "original"
     translated_from: str | None = None  # id of the source item for translated items
+    uncertain_terms: list[str] = Field(default_factory=list)  # terms the machine draft was unsure of (until reviewed)
     source: Source
     method: Method
     verified: bool = False  # checked by a person

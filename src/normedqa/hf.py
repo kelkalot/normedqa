@@ -37,6 +37,10 @@ def _row(it: dict, data_dir: Path) -> dict:
         "also_in": it.get("also_in", []),
         "flags": it.get("flags", []),
         "topic": it.get("topic"),
+        "question_language": it.get("question_language") or it["language"],
+        "translation": it.get("translation", "original"),
+        "translated_from": it.get("translated_from"),
+        "uncertain_terms": it.get("uncertain_terms", []),
         "source_url": it["source"]["url"],
         "source_title": it["source"]["title"],
         "source_publisher": it["source"]["publisher"],
@@ -59,12 +63,14 @@ def export(data_dir: Path, out: Path) -> dict:
         "answer": Sequence(Value("string")), "original_answer": Sequence(Value("string")),
         "status": Value("string"), "status_note": Value("string"), "images": Sequence(Image()),
         "requires_image": Value("bool"), "also_in": Sequence(Value("string")), "flags": Sequence(Value("string")),
-        "topic": Value("string"), "source_url": Value("string"), "source_title": Value("string"),
+        "topic": Value("string"), "question_language": Value("string"), "translation": Value("string"),
+        "translated_from": Value("string"), "uncertain_terms": Sequence(Value("string")), "source_url": Value("string"), "source_title": Value("string"),
         "source_publisher": Value("string"), "source_sha256": Value("string"), "source_pages": Sequence(Value("int32")),
         "source_corpus_path": Value("string"), "source_corpus_commit": Value("string"),
     })
     counts = {}
-    for config, fname in (("exam", "exam.jsonl"), ("sami_reading", "sami_reading.jsonl")):
+    for config, fname in (("exam", "exam.jsonl"), ("sami_reading", "sami_reading.jsonl"),
+                          ("sami_reading_sami", "sami_reading_sami.jsonl"), ("exam_sami", "exam_sami.jsonl")):
         items = [json.loads(l) for l in (data_dir / fname).read_text(encoding="utf-8").splitlines() if l.strip()]
         for split in ("train", "dev", "test"):
             rows = [_row(it, data_dir) for it in items if it.get("split") == split]
@@ -87,8 +93,13 @@ def export_space(data_dir: Path, template_dir: Path, out: Path, max_side: int = 
     (out / "img").mkdir(exist_ok=True)
     shutil.copy(template_dir / "index.html", out / "index.html")
     shutil.copy(template_dir / "README.md", out / "README.md")
-    exam = [json.loads(l) for l in (data_dir / "exam.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
-    sami = [json.loads(l) for l in (data_dir / "sami_reading.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
+    def read(name):
+        path = data_dir / name
+        return [json.loads(l) for l in path.read_text(encoding="utf-8").splitlines() if l.strip()] if path.exists() else []
+
+    exam = read("exam.jsonl") + read("exam_sami.jsonl")
+    sami = read("sami_reading.jsonl")
+    sami_q = {it["translated_from"]: it for it in read("sami_reading_sami.jsonl")}
 
     def opts(it):
         return [[o["label"], o["text"], o.get("explanation"), o.get("points")] for o in it["options"]]
@@ -98,11 +109,15 @@ def export_space(data_dir: Path, template_dir: Path, out: Path, max_side: int = 
                   "q": it["question"], "st": it["status"], "note": it.get("status_note"), "ans": it["answer"],
                   "orig": it.get("original_answer"), "also": it.get("also_in", []), "o": opts(it),
                   "img": [Path(i["file"]).stem + ".jpg" for i in it.get("images", []) if i["position"] == "stem"],
-                  "src": it["source"]["url"], "title": it["source"]["title"], "pages": it["source"]["pages"]} for it in exam],
+                  "src": it["source"]["url"], "title": it["source"]["title"], "pages": it["source"]["pages"],
+                  "tr": it.get("translation", "original")} for it in exam],
         "sami": [{"id": it["id"], "l": it["language"], "p": it["passage"], "po": it.get("passage_original"),
                   "pol": it.get("passage_original_language"), "q": it["question"], "ans": it["answer"], "o": opts(it),
                   "flags": it.get("flags", []), "topic": it.get("topic") or "", "pub": it["source"]["publisher"],
-                  "src": it["source"]["url"], "title": it["source"]["title"]} for it in sami],
+                  "src": it["source"]["url"], "title": it["source"]["title"],
+                  "qs": sami_q.get(it["id"], {}).get("question"),
+                  "os": [o["text"] for o in sami_q.get(it["id"], {}).get("options", [])],
+                  "tr": sami_q.get(it["id"], {}).get("translation")} for it in sami],
     }
     (out / "data.json").write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     n = 0

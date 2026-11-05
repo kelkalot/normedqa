@@ -31,6 +31,18 @@ configs:
   data_files:
   - split: test
     path: sami_reading/test.parquet
+- config_name: sami_reading_sami
+  data_files:
+  - split: test
+    path: sami_reading_sami/test.parquet
+- config_name: exam_sami
+  data_files:
+  - split: train
+    path: exam_sami/train.parquet
+  - split: validation
+    path: exam_sami/validation.parquet
+  - split: test
+    path: exam_sami/test.parquet
 ---
 
 # NorMedQA
@@ -38,7 +50,11 @@ configs:
 NorMedQA tests how well language models answer medical questions in Norwegian. It has two configurations:
 
 - **`exam`**: 2,260 multiple-choice questions from the Norwegian national written final exam in medicine, 16 sittings from spring 2017 to spring 2026. Most come in both Bokmål and Nynorsk, making 3,940 rows. Every question has the official answer key and the official explanation for each option. 457 rows include an image, such as an ECG, X-ray, CT or clinical photo.
-- **`sami_reading`**: 1,662 questions about health texts in North Sámi (1,024), Lule Sámi (345) and South Sámi (293). The passages are written by people. The questions and options are in Bokmål for now; Sámi versions are being reviewed by Sámi-speaking physicians and will be added once checked ([progress](https://github.com/kelkalot/normedqa/issues/5)).
+- **`sami_reading`**: 1,662 questions about health texts in North Sámi (1,024), Lule Sámi (345) and South Sámi (293). The passages are written by people; the questions and options are in Bokmål.
+- **`sami_reading_sami`**: the same 1,662 questions with question and options in the passage's Sámi language.
+- **`exam_sami`**: 200 exam questions from all 16 sittings in North Sámi.
+
+The Sámi questions start as machine drafts (`translation == "machine_draft"`, with `uncertain_terms`). Sámi-speaking physicians are reviewing them, and reviewed rows switch to `translation == "reviewed"` with the corrected text ([progress](https://github.com/kelkalot/normedqa/issues/5)). Treat Sámi scores as provisional until most rows are reviewed.
 
 Code, sources and the build pipeline: <https://github.com/kelkalot/normedqa>
 
@@ -46,7 +62,7 @@ Code, sources and the build pipeline: <https://github.com/kelkalot/normedqa>
 from datasets import load_dataset
 
 exam = load_dataset("kelkalot/normedqa", "exam")
-sami = load_dataset("kelkalot/normedqa", "sami_reading", split="test")
+sami = load_dataset("kelkalot/normedqa", "sami_reading_sami", split="test")  # Sámi questions
 ```
 
 ## Scoring

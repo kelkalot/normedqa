@@ -77,3 +77,30 @@ def test_schema_rejects_answer_outside_options():
     Item(**base, answer=["A"])
     with pytest.raises(ValueError, match=re.escape("not among options")):
         Item(**base, answer=["C"])
+
+
+def test_sami_translations_apply_reviews(tmp_path):
+    import json
+
+    from normedqa.sami_translations import build
+
+    data, src = tmp_path / "data", tmp_path / "sources"
+    data.mkdir(), src.mkdir()
+    base = dict(task="sami_reading", language="se", passage="Sámi teaksta.", question="Hva?", answer=["A"],
+                options=[dict(label="A", text="ja"), dict(label="B", text="nei")], method="drafted", status="ok",
+                source=dict(url="u", title="t", publisher="p", sha256="0" * 64, retrieved="2026-11-05"))
+    items = [dict(base, id=f"sami-x-p00-q{k}", group_id=f"sami-x-p00-q{k}") for k in (1, 2, 3)]
+    (data / "sami_reading.jsonl").write_text("\n".join(json.dumps(i) for i in items) + "\n")
+    (data / "exam.jsonl").write_text("")
+    drafts = [dict(id=f"sami-x-p00-q{k}", target="se", question="Mii?", options=["juo", "ii"], uncertain_terms=["x"])
+              for k in (1, 2, 3, 4)]  # q4 is not in the release
+    (src / "sami_drafts.jsonl").write_text("\n".join(json.dumps(d) for d in drafts) + "\n")
+    reviews = [dict(id="sami-x-p00-q1", status="corrected", question="Mii lea?", options=["juo", "ii"]),
+               dict(id="sami-x-p00-q2", status="flagged", comment="feil fasit")]
+    (src / "sami_reviews.jsonl").write_text("\n".join(json.dumps(r) for r in reviews) + "\n")
+    stats = build(data, src)
+    assert stats["skipped_not_in_release"] == 1 and stats["sami_reading_sami.jsonl"] == 3
+    out = {json.loads(l)["translated_from"]: json.loads(l) for l in (data / "sami_reading_sami.jsonl").read_text().splitlines()}
+    assert out["sami-x-p00-q1"]["translation"] == "reviewed" and out["sami-x-p00-q1"]["question"] == "Mii lea?"
+    assert out["sami-x-p00-q2"]["status"] == "excluded" and "feil fasit" in out["sami-x-p00-q2"]["status_note"]
+    assert out["sami-x-p00-q3"]["translation"] == "machine_draft" and out["sami-x-p00-q3"]["answer"] == ["A"]

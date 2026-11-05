@@ -3,7 +3,7 @@
 NorMedQA tests how well language models answer medical questions in Norwegian. Version 3 has two parts:
 
 - **Exam questions**: 2,260 multiple-choice questions from the Norwegian national written final exam in medicine, 16 sittings from spring 2017 to spring 2026. Most come in both Bokmål and Nynorsk. Each has the official answer key and the official explanation for every option. 457 of the 3,940 items include an image (ECG, X-ray, CT, clinical photo and so on).
-- **Sámi reading**: 1,662 questions about health texts in North Sámi (1,024), Lule Sámi (345) and South Sámi (293). Each question is asked about a Sámi passage, which also comes in its original Norwegian, Swedish or Finnish version. In this release the questions and answer options are in Bokmål; Sámi versions are being reviewed ([#5](https://github.com/kelkalot/normedqa/issues/5)).
+- **Sámi reading**: 1,662 questions about health texts in North Sámi (1,024), Lule Sámi (345) and South Sámi (293). Each question is asked about a Sámi passage, which also comes in its original Norwegian, Swedish or Finnish version. The questions and answer options come in Bokmål and in the passage's Sámi language. The Sámi versions start as machine drafts and are being reviewed by Sámi-speaking physicians ([#5](https://github.com/kelkalot/normedqa/issues/5)); 200 exam questions are also available in North Sámi.
 
 v3 replaces v2. The v2 data and code are kept in `legacy/v2/` so earlier results can be reproduced.
 
@@ -13,7 +13,9 @@ v3 replaces v2. The v2 data and code are kept in `legacy/v2/` so earlier results
 |---|---|
 | `exam.jsonl` | 3,940 exam items, one question in one written form per line |
 | `images/` | 335 images, named by the first 16 hex digits of their SHA-256 |
-| `sami_reading.jsonl` | 1,662 Sámi reading items |
+| `sami_reading.jsonl` | 1,662 Sámi reading items, questions in Bokmål |
+| `sami_reading_sami.jsonl` | the same 1,662 items with question and options in Sámi (machine drafts, replaced by reviewed text over time) |
+| `exam_sami.jsonl` | 200 exam questions in North Sámi (machine drafts, replaced by reviewed text over time) |
 
 Every item has:
 - `id` and `group_id`; the Bokmål and Nynorsk versions of a question share a `group_id`
@@ -59,7 +61,7 @@ uv run normedqa eval --model gpt-5.4-mini --split test
 uv run normedqa eval-report
 ```
 
-`eval` shows each question with its options (and images) and asks for the letter of the answer. Results are cached in `build/eval/`, so an interrupted run picks up where it stopped. Use `--base-url` for any OpenAI-compatible server, such as vLLM or Ollama, and `--no-images` to see how much the image questions depend on the image. Add `--file data/v3/sami_reading.jsonl` to run the Sámi set.
+`eval` shows each question with its options (and images) and asks for the letter of the answer. Results are cached in `build/eval/`, so an interrupted run picks up where it stopped. Use `--base-url` for any OpenAI-compatible server, such as vLLM or Ollama, and `--no-images` to see how much the image questions depend on the image. Add `--file data/v3/sami_reading_sami.jsonl` to run the Sámi set in Sámi, or `--file data/v3/sami_reading.jsonl` for the same items with Bokmål questions.
 
 ## Baselines
 
@@ -70,7 +72,7 @@ uv run normedqa eval-report
 
 Both models used low reasoning effort and the options in their original order. Bokmål and Nynorsk scores are within one point of each other for both models. Most image questions can be answered from the text alone; `requires_image` only says that an image is printed with the question.
 
-On the Sámi set, gpt-5.4-mini answers 1,281 of the 1,662 questions correctly without seeing the passage. Those items carry the flag `answerable_without_passage`. The other 381 (239 North, 65 Lule and 77 South Sámi) need the passage. For a test of Sámi reading, use those 381, or the Sámi translations of all questions once they've been reviewed (see below).
+With the questions in Bokmål, gpt-5.4-mini answers 1,281 of the 1,662 Sámi-set questions correctly without seeing the passage. Those items carry the flag `answerable_without_passage`. The other 381 (239 North, 65 Lule and 77 South Sámi) need the passage. With the questions in Sámi (`sami_reading_sami.jsonl`), every item also tests whether the model understands the Sámi question and options. The flag comes from a check with the Bokmål questions only.
 
 ## How the data was built
 
@@ -104,9 +106,13 @@ Most questions from that first round turned out to be answerable without the pas
 
 Keeping only questions that a model gets wrong without the passage also keeps questions with a wrong key or a missing answer, since those defeat the model too. So every passage-dependent question was checked by hand against the original text (by Claude, with the original-language text only). Of 397, 363 were correct as written, 18 were reworded, and 16 were dropped because the passage doesn't answer them, two options were correct, or the correct answer wasn't among the options. Each change is listed with its reason in `sources/sami_item_fixes.yaml`.
 
-## Sámi translations under review
+## Sámi versions of the questions
 
-The goal of the Sámi set is to have everything in Sámi: the passage, the question and the answer options. In this release only the passages are. Sámi versions of all 1,662 reading questions (in the language of the passage) and of 200 exam questions (North Sámi) are drafted and being reviewed by Sámi-speaking physicians; [issue #5](https://github.com/kelkalot/normedqa/issues/5) tracks the progress. Reviewed questions will be added with `translation: "reviewed"`, and the Bokmål versions stay in the data so results in Sámi and Norwegian can be compared.
+The goal of the Sámi set is to have everything in Sámi: the passage, the question and the answer options. `sami_reading_sami.jsonl` has every reading question in the language of its passage, and `exam_sami.jsonl` has 200 exam questions, drawn from all 16 sittings, in North Sámi.
+
+All of them start as machine drafts: `translation: "machine_draft"`, with `uncertain_terms` listing the words the draft wasn't sure of. Sámi-speaking physicians review them one by one, and [issue #5](https://github.com/kelkalot/normedqa/issues/5) tracks the progress. A reviewed item gets `translation: "reviewed"` and the corrected text; an item flagged in review gets `status: "excluded"` with the reviewer's comment. Answer keys and passages come from the Bokmål item (`translated_from`), so you can compare results in Sámi and Norwegian on the same questions. Until most items are reviewed, treat Sámi scores as provisional, especially for Lule and South Sámi.
+
+To add reviews, append the review app's export to `sources/sami_reviews.jsonl` and run `uv run normedqa sami-translations`. The machine drafts themselves are kept in `sources/sami_drafts.jsonl`.
 
 We chose the drafting system by translating 120 Norwegian sentences that have official Sámi translations. The table shows chrF++ against the official translations:
 
