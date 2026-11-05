@@ -1,0 +1,136 @@
+# Corrections to individual Sámi reading questions, found in review. Applied by `normedqa sami-build`.
+# drop: true removes the item. question: replaces the Norwegian question text. Every entry gives a reason.
+
+sami-smj-kronihkka-same-almmuk-premissavadden-avtaarvvusasj-varresvuo-p03-h3:
+  drop: true
+  reason: The correct answer (Samisk legeforening) is not among the options; the key marks the group from the previous clause.
+
+sami-smj-magsjuka-hos-barn-vad-kan-man-gora-sjalv-html-p05-h1:
+  question: Etter hvor lang tid bør man kontakte helsetjenesten hvis et barn med omgangssyke ikke er blitt bedre?
+  reason: The generated wording was ungrammatical.
+
+# From the audit of all passage-dependent questions against the original text (2026-11-05).
+sami-se-8helse-sme-docx-p03-h4:
+  question: Hvilken fase er prosjektet i sørsamisk område i, ifølge teksten?
+  reason: 'Audit (wording): The text states ''Prosjektet er i avslutningsåret'', but the question ''Hva står det at prosjektet ... skal være i?'' is awkward and implies
+    a plan rather than the current phase.'
+sami-se-buohcceviesuid-ekonomiija-nannejit-27-mi-id-745220-html-p01-h2:
+  question: Hvilke områder skal få 255 millioner kroner av den foreslåtte bevilgningsøkningen på 300 millioner til økt kjøp fra private?
+  reason: 'Audit (wording): The text says ''fordeler seg med 255 millioner i økt kjøp fra private innen rus, psykisk helsevern og rehabilitering'', so the whole 255
+    million goes there and ''størstedelen av ... 255 millioner'' is muddled.'
+sami-se-doaibmabijut-eastadit-koronavirusa-njoammumis-html-p07-h3:
+  drop: true
+  reason: 'Audit (unsupported): The passage only covers events ''med inntil 50 deltakerne på offentlig sted'' and a sports infection-control guide; it says nothing
+    about guidelines for leisure travel or a start date.'
+sami-se-faktablad-covid-19-70-ar-nordsamiska-pdf-p01-h1:
+  question: 'Ifølge rådene til personer som er 70 år eller eldre: omtrent hvor stor avstand bør man holde til andre mennesker når man møtes?'
+  reason: 'Audit (wording): The advice ''träffas med ungefär en armlängds avstånd'' is addressed to people aged 70 or older to avoid infection, not to ''koronasmittede
+    eldre'' as the question says.'
+sami-se-gynekologisk-cellprovtagning-html-p13-h2:
+  drop: true
+  reason: 'Audit (unsupported): This passage says nothing about when the cell test result arrives; it only covers bleeding symptoms and follow-up of cell changes.'
+sami-se-jahkediedahus-2016-buhcciid-ja-geavaheddjiidaittardeaddjit-n-p09-h3:
+  question: Hvor stor andel av henvendelsene knyttes til rettigheter, som oftest mistanke om brudd på pasient- og brukerrettigheter?
+  reason: 'Audit (wording): The text says ''30 prosent av henvendelsene knyttes til rettigheter, som oftest mistanke om brudd'', so 30 percent is the rights category,
+    not suspected breaches alone.'
+sami-se-jahkediedahus-2017-pasieanta-ja-geavaheddjiidaittardeaddji-p-p40-h1:
+  drop: true
+  reason: 'Audit (missing): The text says Helsedirektoratet wants ''en veiledende bemanningsnorm'' that is not ''juridisk bindende''; option D''s ''lokal anbefaling
+    uten nasjonale føringer'' misstates this national guiding norm, and no option says advisory but not legally binding.'
+sami-se-kronihkka-heajos-organiseren-adda-eahpesihkarvuoda-sami-pasi-p00-h3:
+  drop: true
+  reason: 'Audit (unsupported): This excerpt ends with ''Sámi Klinihkka er nemlig underlagt Finnmarkssykehuset'' and never mentions when the council will raise the
+    matter or any plenary meeting in March.'
+sami-se-kronihkka-sapmelaccat-mielde-bidjame-eavttuid-ovttaarvosas-d-p02-h1:
+  drop: true
+  reason: 'Audit (unsupported): The passage discusses ''Utviklingsplanen ... eid av Helse Nord'' but gives no target year at all, so 2035 cannot be found in the text.'
+sami-se-lappi-sevdnjes-kulturrbi-proeakta-ja-smemusea-siida-ordnejit-p09-h3:
+  question: Hva gjelder forhåndsutlånet som Siida kunngjør at har begynt?
+  reason: 'Audit (wording): Key is right (''Guhkkin Davvin -konserttivideon ennakkolainaus on alkanut'') but ''forhåndsselvingen'' is not a Norwegian word.'
+sami-se-mammografi-html-p11-h2:
+  question: Under hvilken alder er brystkreft oppgitt å være uvanlig, ifølge teksten?
+  reason: 'Audit (wording): Key is right (''Bröstcancer är ovanligt under 30 års ålder'') but the question ''Hvor gammel er brystkreft oppgitt å være uvanlig før''
+    is ungrammatical.'
+sami-se-om-man-inte-ar-nojd-med-tandvarden-html-p05-h1:
+  drop: true
+  reason: 'Audit (unsupported): The passage never mentions IVO; the two-year limit (''inte händelser som är äldre än två år'') applies to förtroendenämnden.'
+sami-se-om-man-inte-ar-nojd-med-tandvarden-html-p12-h2:
+  drop: true
+  reason: 'Audit (missing): Text only says ''anmälan göras i det land där man blivit undersökt eller behandlad''; no insurance company is mentioned, so key A adds
+    an unsupported detail.'
+sami-se-patientavgifter-html-p00-h2:
+  drop: true
+  reason: 'Audit (unsupported): This passage does not mention the daily fee for hospital admission at all.'
+sami-se-prm-samediggi-lea-ovttasbargguin-dearvvasvuodadirektorahtain-p01-q1:
+  question: Hvor lenge skal pilotprosjektet i Pasient- og brukerombudet vare ifølge planen som er beskrevet i saken om samiske pasienter?
+  reason: 'Audit (wording): The key matches ''pilotprosjekt som skal på gå over en to års-periode'', but the question ''Hva skal pilotprosjektet ... vare'' is ungrammatical
+    (should ask ''Hvor lenge'').'
+sami-se-raehus-uovvola-dalkkadatsoahpamua-id-703556-html-p04-q1:
+  question: Hvor mye øker satsingen på rein energi og klimatilpasning med særlig vekt på matsikkerhet til i 2013 ifølge budsjettet?
+  reason: 'Audit (wording): The text says the effort ''aukar til om lag to milliardar kroner'' (increases to, not by), so ''Hvor mye øker'' misstates what the key
+    answers.'
+sami-se-ravvagat-korona-birra-vahnemiidda-manaide-ja-nuoraide-html-p07-h2:
+  question: Hva sier rådene om hvem som bør være til stede under en bursdagsfeiring?
+  reason: 'Audit (wording): The key matches ''Det bør unngås at andre ledsagere/deltagere er tilstede'', but ''hvem som helst'' in the question reads as ''anyone''
+    and makes it confusing.'
+sami-se-ravvagat-korona-birra-vahnemiidda-manaide-ja-nuoraide-html-p08-h1:
+  question: Hva kan man gjerne spørre barn og unge om når det gjelder koronaviruset, ifølge teksten?
+  reason: 'Audit (wording): The text only says ''Spør gjerne om de har lest noe om koronaviruset på nettet i dag''; the question''s ''bør ... hver dag'' overstates
+    it, though the key matches.'
+sami-se-samediggi-doarju-sami-psykososiala-doarjaga-ovttadaga-doaimm-p02-h3:
+  question: Hvor mange av stillingene som læremiddelplanlegger ved kontoret for utdanning og læremidler var besatt i 2022?
+  reason: 'Audit (wording): Key is right (''Viroista vuonna 2022 on ollut täytettynä neljä'') but the question uses the untranslated Finnish word ''oppimateriaalisuunnittelija''.'
+sami-se-samediggi-giita-oahpahus-ja-kulturministeriija-samegielat-so-p02-h1:
+  drop: true
+  reason: 'Audit (ambiguous): Text says ''lähes kahden miljoonan euron'' and the two grants (1 000 000 + 918 634,93) sum to about 1.9 million, so both C and D fit.'
+sami-se-samediggi-oassalasta-madrid-dalkkadatkonferensii-html-p00-h1:
+  question: Hvor mange aktiviteter inneholder arbeidsprogrammet for urfolkspanelet som omtales i teksten?
+  reason: 'Audit (wording): Key is right (''yhteensä 12 aktiviteettia'') but the question refers oddly to ''den nordiske teksten'' (the text is Finnish).'
+sami-se-samediggi-oassalasttii-on-id-dalkkadatkonferensii-eamialbmog-p02-q1:
+  question: Hvor mange deltakere anslås å ha vært med på Glasgow-møtet og sidearrangementene til COP ifølge teksten?
+  reason: 'Audit (wording): The key fits ''arviolta yli 25 000 osallistujaa'', but the question refers to a ''Nord-Sámi-passasjen'' although the passage is in Finnish,
+    which is confusing.'
+sami-se-samedikki-dievascoahkkin-guokte-coahkkinoassevaldi-leaba-tes-p00-h1:
+  question: Hvem har Sametinget informert om smittesituasjonen i tillegg til Alta kommune?
+  reason: 'Audit (wording): The text says ''Sametinget har informert Alta kommune og Scandic Alta hotell'', but the question says Sametinget was informed, reversing
+    who informed whom.'
+sami-se-samiske-pasienter-sme-docx-p00-h2:
+  question: Hva er det ifølge teksten ikke mulig å gjøre med pasienter når det gjelder Sámi Klinihkka?
+  reason: 'Audit (wording): The text says ''det er ikke mulig å henvise pasienter direkte til Sámi Klinihkka'', but the question''s ''gjøre direkte med pasienter
+    ved Sámi Klinihkka'' garbles this.'
+sami-sma-4-healsoeektiedamme-jielede-jih-barkoetsiehkieh-baatsoesaemi-p30-h3:
+  drop: true
+  reason: 'Audit (unsupported): This passage only covers focus-group themes and the ''80 %'' grazing-loss figure; it says nothing about the share who think the state
+    has good knowledge of reindeer herding.'
+sami-sma-aalkoe-almetjh-jih-demense-noerhtelaantine-pdf-p23-h1:
+  drop: true
+  reason: 'Audit (unsupported): The ''19'' in ''urfolksperspektiv och 19 praktiska konsekvenser'' is a PDF page-number artifact (like the stray ''20'' and ''21'');
+    the text never actually gives a count of consequences.'
+sami-sma-aalkoe-almetjh-jih-demense-noerhtelaantine-pdf-p23-h3:
+  drop: true
+  reason: 'Audit (unsupported): The passage never mentions a ''temaområde'', Nordens välfärdscenter''s role, or ''omsorg på avstand''; nothing in it answers the question.'
+sami-smj-a-leve-med-demens-smj-pdf-p00-h1:
+  drop: true
+  reason: 'Audit (ambiguous): Text gives a range, ''kan vare fra noen få år til omkring 20 år'', so ''Mindre enn 5 år'' (B) matches the lower end as well as D the
+    upper end.'
+sami-smj-barns-och-foraldrars-rattigheter-i-varden-html-p13-h1:
+  drop: true
+  reason: 'Audit (ambiguous): Text says no one can refuse care ''enligt smittskyddslagen, ... (LVU) eller lagen om psykiatrisk tvångsvård (LPT)'', so both B and D
+    are correct.'
+sami-smj-blodprov-psa-html-p06-q1:
+  question: Omtrent hvor mange middelaldrende menn har forhøyet PSA-verdi, ifølge informasjonen om PSA?
+  reason: 'Audit (wording): The key matches ''Ungefär en av tio medelålders män'', but ''omtrent'' is misplaced in the question (''har omtrent forhøyet PSA-verdi'').'
+sami-smj-blodprov-psa-html-p07-q1:
+  question: Omtrent hvor mange av dem som tar PSA-test gjentatte ganger over mange år, får en PSA-verdi som gjør at flere undersøkelser trengs?
+  reason: 'Audit (wording): The key matches ''ungefär en av fyra'', but ''omtrent'' is misplaced in the question (''får omtrent en PSA-verdi'').'
+sami-smj-feber-hos-barn-vad-kan-man-gora-sjalv-html-p05-q1:
+  question: Når bør man kontakte helsetjenesten for et barn som er mellom tre og seks måneder gammelt og har feber?
+  reason: 'Audit (wording): The fragment only says ''mellan tre och sex månader och har feber över 39 grader''; the question adds ''alltid'' and the Swedish word
+    ''vårdsentral'', which the text does not support.'
+sami-smj-skydda-dig-html-p02-h2:
+  drop: true
+  reason: 'Audit (unsupported): The passage only says to use ''handsprit (eller motsvarande handdesinfektionsmedel)'' and gives no alcohol percentage.'
+sami-smj-tystnadplikt-och-sekretess-html-p00-h3:
+  drop: true
+  reason: 'Audit (unsupported): The passage only says ''alla som arbetar inom hälso- och sjukvården'' have tystnadsplikt; interpreters or any other specific group
+    are not mentioned.'

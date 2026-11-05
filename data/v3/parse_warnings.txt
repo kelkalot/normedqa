@@ -1,0 +1,3 @@
+felles-2017V-key-xx-rev Q86: question printed twice; second copy skipped
+felles-2023H-key-nb-rev Q62: option C out of reading order
+felles-2025H-key-nn-rev Q129: option text missing in source: ['B']

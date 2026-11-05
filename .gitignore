@@ -1,0 +1,12 @@
+# Downloaded source documents. They are re-fetched from sources/sources.yaml and checked by hash.
+raw/
+# Intermediate build output
+build/
+
+__pycache__/
+*.egg-info/
+.venv/
+.pytest_cache/
+.DS_Store
+.ipynb_checkpoints/
+.env

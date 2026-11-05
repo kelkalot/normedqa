@@ -1,0 +1,46 @@
+[project]
+name = "normedqa"
+version = "3.0.0.dev0"
+description = "Build and evaluate NorMedQA, a Norwegian medical question answering benchmark (Bokmål, Nynorsk, Sámi)."
+readme = "README.md"
+license = "CC-BY-NC-4.0"
+authors = [
+    { name = "Michael A. Riegler" },
+    { name = "Sushant Gautam" },
+    { name = "Maja Gran Erke" },
+]
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.12",
+    "pydantic>=2.6",
+    "pymupdf>=1.24",
+    "pyyaml>=6.0",
+    "requests>=2.31",
+]
+
+[project.scripts]
+normedqa = "normedqa.cli:main"
+
+[project.optional-dependencies]
+eval = [
+    "openai>=1.40",
+    "sacrebleu>=2.4",
+]
+hf = [
+    "datasets>=3.0",
+    "huggingface-hub>=0.25",
+    "pillow>=10",
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/normedqa"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

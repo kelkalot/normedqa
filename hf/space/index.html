@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NorMedQA Browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* One reading column: what the dataset is, then a filterable list of items laid out like the answer keys. */
+:root {
+  --bg: #f4f7f6; --surface: #ffffff; --fg: #16201e; --muted: #566461; --line: #d9e1df;
+  --accent: #0e6a5b; --accent-soft: #e2f0ec; --key: #b8261d; --key-soft: #fbe9e7; --warn: #9a5800; --warn-soft: #fbf0df;
+  --f-body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --f-label: "IBM Plex Sans Condensed", "Arial Narrow", Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root {
+  --bg: #0e1413; --surface: #162120; --fg: #e3ebe9; --muted: #9aaaa7; --line: #2a3735;
+  --accent: #55bba6; --accent-soft: #173a33; --key: #ff7a6e; --key-soft: #3a1c19; --warn: #e5a94f; --warn-soft: #3a2a12; color-scheme: dark } }
+* { box-sizing: border-box }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.55 var(--f-body) }
+.wrap { max-width: 980px; margin: 0 auto; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 24px }
+h1 { font: 600 1.9rem/1.15 var(--f-body); margin: 0; letter-spacing: -0.01em }
+.lede { color: var(--muted); margin: 6px 0 0; max-width: 70ch }
+.lede a, .src a { color: var(--accent) }
+.label { font: 600 0.72rem/1 var(--f-label); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted) }
+.mono { font-family: var(--f-mono); font-size: 0.82rem }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden }
+.stat { background: var(--surface); padding: 12px 14px; display: grid; gap: 6px }
+.stat b { font: 600 1.45rem/1 var(--f-body); font-variant-numeric: tabular-nums }
+.tabs { display: flex; gap: 6px; flex-wrap: wrap }
+.tabs button[aria-pressed="true"] { background: var(--accent); color: var(--surface); border-color: var(--accent) }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-bottom: 1px solid var(--line) }
+select, input[type=search], button { font: inherit; font-size: 0.9rem; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; min-width: 0 }
+input[type=search] { flex: 1 1 200px }
+button { cursor: pointer } button:hover { border-color: var(--accent) }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.count { color: var(--muted); font-size: 0.88rem; margin-left: auto; font-variant-numeric: tabular-nums }
+.list { display: grid; gap: 14px }
+.item { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; display: grid; gap: 10px; min-width: 0 }
+.item.voided, .item.excluded { border-color: var(--key) }
+.meta { display: flex; flex-wrap: wrap; gap: 6px; align-items: center }
+.chip { font: 600 0.7rem/1 var(--f-label); letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 7px; border-radius: 4px; background: var(--accent-soft); color: var(--accent) }
+.chip.red { background: var(--key-soft); color: var(--key) } .chip.amber { background: var(--warn-soft); color: var(--warn) }
+.q, .passage { white-space: pre-wrap; overflow-wrap: anywhere; max-width: 75ch }
+.passage { border-left: 3px solid var(--accent); padding-left: 12px }
+.imgs { display: flex; flex-wrap: wrap; gap: 8px }
+.imgs a { display: block; max-width: 100% } .imgs img { display: block; max-height: 320px; width: auto; max-width: 100%; border: 1px solid var(--line); border-radius: 4px; background: #fff }
+.opts { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none }
+.opt { display: grid; grid-template-columns: 4.2em 1fr; gap: 8px; padding: 5px 8px; border-radius: 5px; min-width: 0 }
+.opt .mark { font: 600 0.92rem/1.5 var(--f-mono); white-space: nowrap }
+.opt.acc { background: var(--accent-soft) } .opt.acc .mark { color: var(--accent) }
+.opt .txt { overflow-wrap: anywhere }
+.opt .pts { font: 500 0.75rem var(--f-mono); color: var(--muted) }
+.opt .orig { color: var(--key); font-family: var(--f-mono); font-size: 0.8rem }
+details summary { cursor: pointer; color: var(--muted); font-size: 0.88rem }
+.expl { display: grid; gap: 6px; margin-top: 6px; font-size: 0.9rem; font-style: italic; color: var(--muted); max-width: 75ch }
+.gnote { color: var(--key); font-size: 0.9rem; max-width: 75ch }
+.src { font-size: 0.84rem; color: var(--muted); overflow-wrap: anywhere }
+.pager { display: flex; gap: 8px; justify-content: center; align-items: center; flex-wrap: wrap }
+.empty { color: var(--muted); padding: 24px; text-align: center }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>NorMedQA Browser</h1>
+    <p class="lede">Questions from the Norwegian national final exam in medicine (Bokmål and Nynorsk, 2017–2026, with the official answer key and explanations), and reading questions about health texts in North, Lule and South Sámi. Dataset: <a href="https://huggingface.co/datasets/kelkalot/normedqa" target="_blank" rel="noopener">kelkalot/normedqa</a> · Code and sources: <a href="https://github.com/kelkalot/normedqa" target="_blank" rel="noopener">github.com/kelkalot/normedqa</a></p>
+  </header>
+  <section class="stats" id="stats" aria-label="Dataset totals"></section>
+  <section aria-label="Items">
+    <div class="tabs" role="group" aria-label="Part of the dataset">
+      <button type="button" id="t-exam" aria-pressed="true">Exam questions</button>
+      <button type="button" id="t-sami" aria-pressed="false">Sámi reading</button>
+    </div>
+    <div class="bar">
+      <label class="label" for="f-a">Filter</label><select id="f-a"></select>
+      <label class="label" for="f-l">Language</label><select id="f-l"></select>
+      <label class="label" for="f-k">Show</label><select id="f-k"></select>
+      <input type="search" id="f-q" placeholder="Search question or options">
+      <button id="shuffle" type="button">Shuffle</button>
+      <span class="count" id="count">Loading items…</span>
+    </div>
+    <div class="list" id="list"></div>
+    <div class="pager" id="pager"></div>
+  </section>
+</div>
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmt = n => n.toLocaleString("en-US");
+const LANG = { nb: "Bokmål", nn: "Nynorsk", se: "North Sámi", smj: "Lule Sámi", sma: "South Sámi" };
+const PER = 20;
+let DATA = { exam: [], sami: [] }, part = "exam", view = [], page = 0;
+
+const FILTERS = {
+  exam: { a: ["Sitting", it => it.s], k: [["", "All items"], ["img", "With image"], ["changed", "Key changed at grading"], ["multi", "Several accepted answers"], ["voided", "Voided"], ["excluded", "Excluded"], ["reused", "Reused in another sitting"]] },
+  sami: { a: ["Publisher", it => it.pub], k: [["", "All items"], ["needs", "Needs the passage"], ["easy", "Answerable without the passage"], ["medical", "Medical and patient information"], ["policy", "Health policy"]] },
+};
+
+function setupFilters() {
+  const f = FILTERS[part], items = DATA[part];
+  const vals = [...new Set(items.map(f.a[1]))].filter(Boolean).sort();
+  $("#f-a").innerHTML = `<option value="">All</option>` + vals.map(v => `<option>${esc(v)}</option>`).join("");
+  const langs = [...new Set(items.map(i => i.l))];
+  $("#f-l").innerHTML = `<option value="">All</option>` + langs.map(l => `<option value="${l}">${LANG[l]}</option>`).join("");
+  $("#f-k").innerHTML = f.k.map(([v, t]) => `<option value="${v}">${t}</option>`).join("");
+  $("#t-exam").setAttribute("aria-pressed", part === "exam"); $("#t-sami").setAttribute("aria-pressed", part === "sami");
+}
+
+function matches(it) {
+  const a = $("#f-a").value, l = $("#f-l").value, k = $("#f-k").value, q = $("#f-q").value.trim().toLowerCase();
+  if (a && FILTERS[part].a[1](it) !== a) return false;
+  if (l && it.l !== l) return false;
+  if (part === "exam") {
+    if (k === "img" && !it.img.length) return false;
+    if (k === "changed" && !it.orig) return false;
+    if (k === "multi" && it.ans.length < 2) return false;
+    if (["voided", "excluded"].includes(k) && it.st !== k) return false;
+    if (k === "reused" && !it.also.length) return false;
+  } else {
+    const easy = it.flags.includes("answerable_without_passage");
+    if (k === "needs" && easy) return false;
+    if (k === "easy" && !easy) return false;
+    if (k === "medical" && !it.topic.startsWith("medical")) return false;
+    if (k === "policy" && it.topic.startsWith("medical")) return false;
+  }
+  if (q && !((it.q + " " + (it.p || "")).toLowerCase().includes(q) || it.o.some(o => o[1].toLowerCase().includes(q)) || it.id.includes(q))) return false;
+  return true;
+}
+
+function options(it) {
+  return it.o.map(([lab, txt, , pts]) => {
+    const acc = it.ans.includes(lab), wasX = it.orig && it.orig.includes(lab);
+    return `<li class="opt${acc ? " acc" : ""}"><span class="mark">${lab}${acc ? " ✓" : ""}${pts != null ? ` <span class="pts">${pts}p</span>` : ""}</span><span class="txt">${esc(txt) || "<i>(text missing in source)</i>"}${wasX ? ' <span class="orig">original key</span>' : ""}</span></li>`;
+  }).join("");
+}
+
+function card(it) {
+  if (part === "sami") {
+    const easy = it.flags.includes("answerable_without_passage");
+    return `<article class="item">
+      <div class="meta"><span class="mono">${esc(it.id)}</span><span class="chip">${LANG[it.l]}</span><span class="chip">${esc(it.topic)}</span>${easy ? '<span class="chip amber">Answerable without passage</span>' : ""}</div>
+      <div class="passage" lang="${it.l === "se" ? "se" : it.l}">${esc(it.p)}</div>
+      ${it.po ? `<details><summary>Original text (${esc(it.pol)})</summary><div class="expl">${esc(it.po)}</div></details>` : ""}
+      <div class="q">${esc(it.q)}</div><ul class="opts">${options(it)}</ul>
+      <div class="src">Source: <a href="${esc(it.src)}" target="_blank" rel="noopener">${esc(it.title)}</a> · ${esc(it.pub)}</div>
+    </article>`;
+  }
+  const st = it.st === "voided" ? '<span class="chip red">Voided</span>' : it.st === "excluded" ? '<span class="chip red">Excluded</span>' : "";
+  const extra = (it.orig ? '<span class="chip amber">Key changed</span>' : "") + (it.ans.length > 1 ? '<span class="chip amber">Several answers</span>' : "") + (it.also.length ? '<span class="chip amber">Reused</span>' : "");
+  const expl = it.o.filter(o => o[2]).map(o => `<div><b>${o[0]}</b> ${esc(o[2])}</div>`).join("");
+  const imgs = it.img.length ? `<div class="imgs">${it.img.map(f => `<a href="img/${f}" target="_blank" rel="noopener"><img src="img/${f}" loading="lazy" alt="Image for ${esc(it.id)}"></a>`).join("")}</div>` : "";
+  const pages = it.pages.length > 1 ? `pages ${it.pages[0]}–${it.pages[it.pages.length - 1]}` : `page ${it.pages[0]}`;
+  return `<article class="item ${it.st}">
+    <div class="meta"><span class="mono">${esc(it.id)}</span><span class="chip">${it.s}</span><span class="chip">${LANG[it.l]}</span><span class="chip">${esc(it.split)}</span>${st}${extra}</div>
+    <div class="q">${esc(it.q)}</div>${imgs}<ul class="opts">${options(it)}</ul>
+    ${it.note ? `<div class="gnote">${esc(it.note)}</div>` : ""}
+    ${expl ? `<details><summary>Official explanations</summary><div class="expl">${expl}</div></details>` : ""}
+    <div class="src">Source: <a href="${esc(it.src)}" target="_blank" rel="noopener">${esc(it.title)}</a>, ${pages}</div>
+  </article>`;
+}
+
+function apply() { view = DATA[part].filter(matches); page = 0; render(); }
+function render() {
+  const pages = Math.max(1, Math.ceil(view.length / PER));
+  const slice = view.slice(page * PER, page * PER + PER);
+  $("#list").innerHTML = slice.length ? slice.map(card).join("") : '<div class="empty">No items match these filters.</div>';
+  $("#count").textContent = `${fmt(view.length)} items`;
+  $("#pager").innerHTML = view.length > PER ? `<button type="button" id="prev" ${page ? "" : "disabled"}>Previous</button><span class="count" style="margin:0">Page ${page + 1} of ${pages}</span><button type="button" id="next" ${page < pages - 1 ? "" : "disabled"}>Next</button>` : "";
+  if ($("#prev")) $("#prev").onclick = () => { page--; render(); $("#list").scrollIntoView({ block: "start" }); };
+  if ($("#next")) $("#next").onclick = () => { page++; render(); $("#list").scrollIntoView({ block: "start" }); };
+}
+function switchTo(p) { part = p; setupFilters(); apply(); }
+
+fetch("data.json").then(r => r.json()).then(D => {
+  DATA = D;
+  const ex = D.exam, ok = ex.filter(i => i.st === "ok");
+  const stats = [["Exam questions", new Set(ex.map(i => i.g)).size], ["Exam items (nb + nn)", ex.length], ["Scored", ok.length], ["With an image", ex.filter(i => i.img.length).length], ["Sámi reading items", D.sami.length], ["Sámi, needs the passage", D.sami.filter(i => !i.flags.includes("answerable_without_passage")).length]];
+  $("#stats").innerHTML = stats.map(([k, v]) => `<div class="stat"><span class="label">${k}</span><b>${fmt(v)}</b></div>`).join("");
+  ["#f-a", "#f-l", "#f-k"].forEach(s => $(s).addEventListener("change", apply));
+  $("#f-q").addEventListener("input", apply);
+  $("#t-exam").onclick = () => switchTo("exam"); $("#t-sami").onclick = () => switchTo("sami");
+  $("#shuffle").onclick = () => { for (let i = view.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [view[i], view[j]] = [view[j], view[i]]; } page = 0; render(); };
+  switchTo("exam");
+}).catch(() => { $("#count").textContent = "Could not load the data. Reload the page to try again."; });
+</script>
+</body>
+</html>
