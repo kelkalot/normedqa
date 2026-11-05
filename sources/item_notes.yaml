@@ -1,0 +1,19 @@
+# Notes added by hand to individual questions, found during quality checks.
+# Keys are item ids (one written form) or group ids (both written forms).
+# status: excluded keeps the item in the data but leaves it out of scoring.
+# Notes describe the issue without quoting exam text, which is not redistributed through this repository.
+
+felles-2021V-052:
+  note: Fagprøven (same paper) accepted a different pair of answers at grading. This item follows the national exam's key.
+felles-2024V-048:
+  note: Fagprøven (same paper) voided this question at grading. This item follows the national exam's key.
+felles-2024V-053:
+  note: Fagprøven (same paper) accepted one more answer at grading. This item follows the national exam's key.
+
+# Source defects in the Nynorsk key for 2025H (the unkeyed Nynorsk copy has the same defects).
+felles-2025H-nn-037:
+  status: excluded
+  note: "Source defect: the question sentence is missing in the Nynorsk document; the Bokmål version has it."
+felles-2025H-nn-069:
+  status: excluded
+  note: "Source defect: the question sentence is missing in the Nynorsk document; the Bokmål version has it."
