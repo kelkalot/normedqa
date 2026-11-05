@@ -3,7 +3,7 @@
 NorMedQA tests how well language models answer medical questions in Norwegian. Version 3 has two parts:
 
 - **Exam questions**: 2,260 multiple-choice questions from the Norwegian national written final exam in medicine, 16 sittings from spring 2017 to spring 2026. Most come in both Bokmål and Nynorsk. Each has the official answer key and the official explanation for every option. 457 of the 3,940 items include an image (ECG, X-ray, CT, clinical photo and so on).
-- **Sámi reading**: 1,662 questions about health texts in North Sámi (1,024), Lule Sámi (345) and South Sámi (293). Each question is asked about a Sámi passage, which also comes in its original Norwegian, Swedish or Finnish version.
+- **Sámi reading**: 1,662 questions about health texts in North Sámi (1,024), Lule Sámi (345) and South Sámi (293). Each question is asked about a Sámi passage, which also comes in its original Norwegian, Swedish or Finnish version. In this release the questions and answer options are in Bokmål; Sámi versions are being reviewed ([#5](https://github.com/kelkalot/normedqa/issues/5)).
 
 v3 replaces v2. The v2 data and code are kept in `legacy/v2/` so earlier results can be reproduced.
 
@@ -106,7 +106,7 @@ Keeping only questions that a model gets wrong without the passage also keeps qu
 
 ## Sámi translations under review
 
-Draft translations of the reading questions into the passage's Sámi language, and of 200 exam questions into North Sámi, are being reviewed by Sámi-speaking physicians. They aren't part of this release. Reviewed items will be added with `translation: "reviewed"` in a later version.
+The goal of the Sámi set is to have everything in Sámi: the passage, the question and the answer options. In this release only the passages are. Sámi versions of all 1,662 reading questions (in the language of the passage) and of 200 exam questions (North Sámi) are drafted and being reviewed by Sámi-speaking physicians; [issue #5](https://github.com/kelkalot/normedqa/issues/5) tracks the progress. Reviewed questions will be added with `translation: "reviewed"`, and the Bokmål versions stay in the data so results in Sámi and Norwegian can be compared.
 
 We chose the drafting system by translating 120 Norwegian sentences that have official Sámi translations. The table shows chrF++ against the official translations:
 
