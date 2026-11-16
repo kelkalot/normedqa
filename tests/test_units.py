@@ -104,3 +104,35 @@ def test_sami_translations_apply_reviews(tmp_path):
     assert out["sami-x-p00-q1"]["translation"] == "reviewed" and out["sami-x-p00-q1"]["question"] == "Mii lea?"
     assert out["sami-x-p00-q2"]["status"] == "excluded" and "feil fasit" in out["sami-x-p00-q2"]["status_note"]
     assert out["sami-x-p00-q3"]["translation"] == "machine_draft" and out["sami-x-p00-q3"]["answer"] == ["A"]
+
+
+def test_draft_fixes_and_passage_flag(tmp_path):
+    import json
+
+    import yaml
+
+    from normedqa.sami_translations import PASSAGE_FLAG, build
+
+    data, src = tmp_path / "data", tmp_path / "sources"
+    data.mkdir(), src.mkdir()
+    base = dict(task="sami_reading", language="se", passage="Teaksta.", question="Hva undersøkes?", answer=["A"],
+                options=[dict(label="A", text="ja"), dict(label="B", text="nei")], method="drafted", status="ok",
+                source=dict(url="u", title="t", publisher="p", sha256="0" * 64, retrieved="2026-11-16"))
+    (data / "sami_reading.jsonl").write_text("\n".join(json.dumps(dict(base, id=i, group_id=i)) for i in ("r1", "r2")) + "\n")
+    (data / "exam.jsonl").write_text("")
+    drafts = [dict(id="r1", target="se", question="Dutkan ja dutkamuš?", options=["dutkat", "ii"]),
+              dict(id="r2", target="se", question="Dutkan?", options=["juo", "ii"])]
+    (src / "sami_drafts.jsonl").write_text("\n".join(json.dumps(d) for d in drafts) + "\n")
+    fixes = {"terms": [{"id": "t", "language": "se", "pattern": "dutk(?!amuš)", "replacement": "isk", "items": ["r1"]}],
+             "items": {"r1": {"options": {"B": "ii goassege"}}}}
+    (src / "sami_draft_fixes.yaml").write_text(yaml.safe_dump(fixes))
+    (src / "sami_reviews.jsonl").write_text(json.dumps(dict(id="r1", status="skipped", passage_differs=True, comment="x")) + "\n")
+    stats = build(data, src)
+    assert stats["draft_fixes_applied"] == 1 and stats[PASSAGE_FLAG] == 1
+    out = {json.loads(l)["translated_from"]: json.loads(l) for l in (data / "sami_reading_sami.jsonl").read_text().splitlines()}
+    assert out["r1"]["question"] == "Iskan ja dutkamuš?"  # case kept, dutkamuš left alone
+    assert [o["text"] for o in out["r1"]["options"]] == ["iskat", "ii goassege"]
+    assert out["r2"]["question"] == "Dutkan?"  # rule only applies to listed items
+    assert PASSAGE_FLAG in out["r1"]["flags"] and PASSAGE_FLAG not in out["r2"]["flags"]
+    nb = {json.loads(l)["id"]: json.loads(l) for l in (data / "sami_reading.jsonl").read_text().splitlines()}
+    assert PASSAGE_FLAG in nb["r1"]["flags"]  # the Bokmål version shares the passage

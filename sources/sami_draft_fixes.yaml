@@ -1,0 +1,90 @@
+# Corrections to the machine drafts of the Sámi questions, from reviewer feedback.
+# `normedqa sami-translations` applies them only to items that are still machine drafts;
+# text a reviewer has approved or corrected is never changed. The original drafts stay in sami_drafts.jsonl.
+
+terms:
+- id: se-iskat-not-dutkat
+  language: se
+  note: Clinical examination is iskat/iskan, not dutkat/dutkan (research). Reviewer feedback 2026-11-16. Applied only to items where the Norwegian means
+    a clinical examination; uses about research, surveys and investigating a case keep dutk-. The noun dutkamuš and dutkanregistar are left for the reviewer.
+  pattern: dutk(?!amuš|anregist)
+  replacement: isk
+  items:
+  - felles-2017V-nb-015
+  - felles-2017V-nb-017
+  - felles-2017V-nb-094
+  - felles-2018V-nb-090
+  - felles-2018V-nb-097
+  - felles-2018V-nb-130
+  - felles-2018V-nb-133
+  - felles-2018V-nb-145
+  - felles-2019V-nb-077
+  - felles-2019V-nb-107
+  - felles-2019V-nb-112
+  - felles-2019V-nb-117
+  - felles-2019V-nb-167
+  - felles-2019V-nb-174
+  - felles-2020H-nb-053
+  - felles-2020V-nb-069
+  - felles-2020V-nb-074
+  - felles-2020V-nb-086
+  - felles-2020V-nb-117
+  - felles-2021H-nb-077
+  - felles-2021H-nb-127
+  - felles-2021V-nb-078
+  - felles-2021V-nb-092
+  - felles-2022H-nb-068
+  - felles-2022H-nb-073
+  - felles-2022H-nb-097
+  - felles-2022H-nb-106
+  - felles-2022H-nb-112
+  - sami-se-barns-och-foraldrars-rattigheter-i-varden-html-p01-q2
+  - sami-se-barns-och-foraldrars-rattigheter-i-varden-html-p04-q2
+  - sami-se-barns-och-foraldrars-rattigheter-i-varden-html-p06-q1
+  - sami-se-barns-och-foraldrars-rattigheter-i-varden-html-p06-q2
+  - sami-se-barns-och-foraldrars-rattigheter-i-varden-html-p07-q1
+  - sami-se-blodprov-psa-html-p07-q1
+  - sami-se-blodprov-psa-html-p07-q2
+  - sami-se-gynekologisk-cellprovtagning-html-p13-q1
+  - sami-se-mammografi-html-p00-q1
+  - sami-se-mammografi-html-p00-q2
+  - sami-se-mammografi-html-p02-q2
+  - sami-se-mammografi-html-p03-q2
+  - sami-se-mammografi-html-p04-q1
+  - sami-se-mammografi-html-p06-q1
+  - sami-se-mammografi-html-p06-q2
+  - sami-se-mammografi-html-p07-h2
+  - sami-se-mammografi-html-p09-q1
+  - sami-se-mammografi-html-p09-q2
+  - sami-se-mammografi-html-p11-q1
+  - sami-se-mammografi-html-p11-q2
+  - sami-se-om-man-inte-ar-nojd-med-tandvarden-html-p12-q2
+  - sami-se-ont-i-orat-hos-barn-vad-kan-man-gora-sjalv-html-p02-h2
+  - sami-se-ont-i-orat-hos-barn-vad-kan-man-gora-sjalv-html-p02-q2
+  - sami-se-second-opinion-en-andra-lakarbedomning-html-p00-q2
+  - sami-se-second-opinion-en-andra-lakarbedomning-html-p01-q1
+  - sami-se-vad-kostar-lakemedel-pa-recept-html-p10-q1
+  - sami-se-vard-i-sverige-om-man-ar-asylsokande-gomd-eller-papperslos-h-p02-q2
+  - sami-se-vardgaranti-html-p02-q1
+  - sami-se-vardval-html-p03-q2
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p00-q1
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p00-q2
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p02-q2
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p03-q1
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p03-q2
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p04-h1
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p04-q1
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p04-q2
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p05-h3
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p05-q1
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p06-q1
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p06-q2
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p07-q1
+  - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p07-q2
+items:
+  sami-se-blodprov-psa-html-p00-q1:
+    question: PSA-dieđuid mielde, goas sáhttá olmmoš bivdojuvvot váldit PSA-iskosa, jos sus leat gožžaráhkováivvit?
+    options:
+      B: Go doavttir jáhkká ahte váivvit sáhttet boahtit prostátas
+    reason: 'Reviewer feedback 2026-11-16: the draft asked about guođđit (leaving, skipping) a PSA test, copied from the passage''s word-for-word rendering
+      of Swedish ''lämna ett PSA-prov'' (give a sample); option B said the doctor doubts (eahpida) where the key says the doctor believes.'

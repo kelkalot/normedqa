@@ -54,7 +54,7 @@ NorMedQA tests how well language models answer medical questions in Norwegian. I
 - **`sami_reading_sami`**: the same 1,662 questions with question and options in the passage's Sámi language.
 - **`exam_sami`**: 200 exam questions from all 16 sittings in North Sámi.
 
-The Sámi questions start as machine drafts (`translation == "machine_draft"`, with `uncertain_terms`). Sámi-speaking physicians are reviewing them, and reviewed rows switch to `translation == "reviewed"` with the corrected text ([progress](https://github.com/kelkalot/normedqa/issues/5)). Treat Sámi scores as provisional until most rows are reviewed.
+The Sámi questions start as machine drafts (`translation == "machine_draft"`, with `uncertain_terms`). Sámi-speaking physicians are reviewing them, and reviewed rows switch to `translation == "reviewed"` with the corrected text ([progress](https://github.com/kelkalot/normedqa/issues/5)). Treat Sámi scores as provisional until most rows are reviewed. Rows whose Sámi passage says something different from its original (found in review) carry the flag `sami_passage_differs`; report them separately.
 
 Code, sources and the build pipeline: <https://github.com/kelkalot/normedqa>
 
