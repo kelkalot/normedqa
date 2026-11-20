@@ -136,3 +136,17 @@ def test_draft_fixes_and_passage_flag(tmp_path):
     assert PASSAGE_FLAG in out["r1"]["flags"] and PASSAGE_FLAG not in out["r2"]["flags"]
     nb = {json.loads(l)["id"]: json.loads(l) for l in (data / "sami_reading.jsonl").read_text().splitlines()}
     assert PASSAGE_FLAG in nb["r1"]["flags"]  # the Bokmål version shares the passage
+
+
+def test_draft_fix_map_and_marker():
+    from normedqa.sami_translations import apply_draft_fixes
+
+    fixes = {"terms": [
+        {"id": "m", "language": "se", "pattern": r"dutkamuš\w*", "map": {"dutkamuš": "iskkus", "dutkamuša": "iskosa"}, "items": ["x"]},
+        {"id": "u", "language": "se", "pattern": r"\beahpid\w*", "uncertain": "sjekk eahpidit", "items": ["x"]},
+    ]}
+    notes = []
+    q, o, applied = apply_draft_fixes("x", "se", "Röntgendutkamuš ja Dutkamuša?", ["Don eahpidat", "geahpidit"], ["A", "B"], fixes, notes)
+    assert q == "Röntgeniskkus ja Iskosa?"
+    assert o == ["Don eahpidat", "geahpidit"]  # the marker changes nothing; 'geahpidit' is another word
+    assert applied == ["m", "u"] and notes == ["sjekk eahpidit"]

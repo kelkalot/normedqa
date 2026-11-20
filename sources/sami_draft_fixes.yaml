@@ -9,7 +9,7 @@ terms:
     a clinical examination; uses about research, surveys and investigating a case keep dutk-. The noun dutkamuš and dutkanregistar are left for the reviewer.
   pattern: dutk(?!amuš|anregist)
   replacement: isk
-  items:
+  items: &id001
   - felles-2017V-nb-015
   - felles-2017V-nb-017
   - felles-2017V-nb-094
@@ -81,6 +81,47 @@ terms:
   - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p06-q2
   - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p07-q1
   - sami-se-vavnadsprov-av-prostata-prostatabiopsi-html-p07-q2
+- id: se-iskkus-for-undersokelse
+  language: se
+  note: The noun for a clinical examination is iskkus, not dutkamuš (study). Confirmed by the reviewer 2026-11-20. Forms follow the iskkus paradigm (iskkus,
+    iskosa, iskosat, iskosiid, ...); compounds keep their first part.
+  pattern: dutkamuš\w*
+  map:
+    dutkamuš: iskkus
+    dutkamuša: iskosa
+    dutkamušat: iskosat
+    dutkamušaid: iskosiid
+    dutkamušain: iskosiin
+    dutkamušii: iskosii
+    dutkamušas: iskosis
+    dutkamušaide: iskosiidda
+  items: *id001
+- id: se-eahpidit-for-mistenke
+  language: se
+  note: eahpidit is used for 'mistenke' (suspect), as in the published Sámi 1177 texts; the reviewer uses eahpidit only for 'tvile' (doubt), so the reader
+    may take the opposite meaning. Marked for the reviewer, not changed, until the word for 'mistenke' is decided. Reviewer feedback 2026-11-20.
+  pattern: \beahpid\w*
+  uncertain: 'eahpidit/eahpida brukt for «mistenke», slik de samiske 1177-tekstene gjør. Du bruker eahpidit om å tvile: hvilket ord bør stå her?'
+  items:
+  - felles-2017V-nb-017
+  - felles-2017V-nb-074
+  - felles-2017V-nb-094
+  - felles-2018V-nb-130
+  - felles-2018V-nb-145
+  - felles-2019V-nb-025
+  - felles-2019V-nb-160
+  - felles-2020H-nb-012
+  - felles-2022H-nb-114
+  - felles-2024H-nb-076
+  - felles-2024H-nb-134
+  - felles-2024V-nb-058
+  - felles-2024V-nb-062
+  - felles-2025H-nb-036
+  - felles-2025V-nb-091
+  - sami-se-tystnadsplikt-och-sekretess-html-p03-q2
+  - sami-se-tystnadsplikt-och-sekretess-html-p05-q1
+  - sami-se-tystnadsplikt-och-sekretess-html-p06-q1
+  - sami-se-tystnadsplikt-och-sekretess-html-p07-q2
 items:
   sami-se-blodprov-psa-html-p00-q1:
     question: PSA-dieđuid mielde, goas sáhttá olmmoš bivdojuvvot váldit PSA-iskosa, jos sus leat gožžaráhkováivvit?

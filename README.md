@@ -116,7 +116,7 @@ All of them start as machine drafts: `translation: "machine_draft"`, with `uncer
 
 To add reviews, append the review app's export to `sources/sami_reviews.jsonl` and run `uv run normedqa sami-translations`. The machine drafts themselves are kept in `sources/sami_drafts.jsonl`.
 
-Corrections that apply to many drafts at once go into `sources/sami_draft_fixes.yaml`, together with the reason. They're applied only to drafts that haven't been reviewed yet. The first one came from review feedback: the North Sámi drafts used *dutkat/dutkan* (research) where the Norwegian means a clinical examination, which should be *iskat/iskan*.
+Corrections that apply to many drafts at once go into `sources/sami_draft_fixes.yaml`, together with the reason. They're applied only to drafts that haven't been reviewed yet. The first one came from review feedback: the North Sámi drafts used *dutkat/dutkan* (research) where the Norwegian means a clinical examination, which should be *iskat/iskan*, and the noun for an examination is *iskkus*. Where the drafts use *eahpidit* for "suspect", as the published 1177 texts do, they're marked for the reviewer, who uses the word only for "doubt".
 
 The Sámi passages are published translations, and reviewers sometimes find that a passage says something different from its original. In 1177's PSA page, for example, Swedish "lämna ett PSA-prov" (give a sample) is rendered as "guođđit PSA-iskosa", which reads as skipping the test. Such items carry the flag `sami_passage_differs` in both the Sámi-question and the Bokmål-question version. Report them separately, because a model that reads the passage correctly can still disagree with the key.
 

@@ -37,21 +37,33 @@ def _keep_case(word: str, replacement: str) -> str:
     return replacement[:1].upper() + replacement[1:] if word[:1].isupper() else replacement
 
 
-def apply_draft_fixes(iid: str, target: str, question: str, options: list[str], labels: list[str], fixes: dict) -> tuple[str, list[str], list[str]]:
-    """Term rules and item corrections from sources/sami_draft_fixes.yaml; returns the text and the ids of applied fixes."""
+def apply_draft_fixes(iid: str, target: str, question: str, options: list[str], labels: list[str], fixes: dict,
+                      notes: list[str] | None = None) -> tuple[str, list[str], list[str]]:
+    """Term rules and item corrections from sources/sami_draft_fixes.yaml; returns the text and the ids of applied fixes.
+
+    A term rule finds `pattern` (case-insensitive) in the listed items and either replaces each match with
+    `replacement`, or looks the matched text up in `map` (exact forms, e.g. an inflection table). A rule with
+    `uncertain` adds that note to the item's uncertain terms when it matches, so the reviewer sees it; a rule with
+    only `uncertain` marks words without changing them.
+    """
     applied = []
     for rule in fixes.get("terms", []):
         if rule["language"] != target or iid not in set(rule.get("items", [])):
             continue
         rx = re.compile(rule["pattern"], re.I)
+        if not any(rx.search(t) for t in [question, *options]):
+            continue
 
-        def sub(text: str) -> str:
-            return rx.sub(lambda m: _keep_case(m.group(0), rule["replacement"]), text)
+        def repl(m: re.Match) -> str:
+            if "replacement" in rule:
+                return _keep_case(m.group(0), rule["replacement"])
+            new = (rule.get("map") or {}).get(m.group(0).lower())
+            return _keep_case(m.group(0), new) if new else m.group(0)
 
-        new_q, new_o = sub(question), [sub(o) for o in options]
-        if (new_q, new_o) != (question, options):
-            applied.append(rule["id"])
-            question, options = new_q, new_o
+        question, options = rx.sub(repl, question), [rx.sub(repl, o) for o in options]
+        applied.append(rule["id"])
+        if rule.get("uncertain") and notes is not None:
+            notes.append(rule["uncertain"])
     fx = (fixes.get("items") or {}).get(iid)
     if fx:
         question = fx.get("question") or question
@@ -84,9 +96,10 @@ def build(data_dir: Path, sources: Path) -> dict:
             continue
         question, options, translation, status, note = d["question"], d["options"], "machine_draft", src["status"], src.get("status_note")
         rev = reviews.get(iid)
+        notes: list[str] = []
         if not (rev and rev["status"] in ("approved", "corrected")):
             question, options, applied = apply_draft_fixes(iid, d["target"], question, options,
-                                                           [o["label"] for o in src["options"]], fixes)
+                                                           [o["label"] for o in src["options"]], fixes, notes)
             stats["draft_fixes_applied"] += bool(applied)
         if rev and rev["status"] in ("approved", "corrected"):
             translation = "reviewed"
@@ -106,7 +119,7 @@ def build(data_dir: Path, sources: Path) -> dict:
             question_language=d["target"],
             translation=translation,
             translated_from=iid,
-            uncertain_terms=[] if translation == "reviewed" else d.get("uncertain_terms", []),
+            uncertain_terms=[] if translation == "reviewed" else notes + d.get("uncertain_terms", []),
             status=status,
             status_note=note,
         )
